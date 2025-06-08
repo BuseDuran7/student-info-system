@@ -1,5 +1,6 @@
 package com.ege.entities;
 
+import com.ege.entities.enums.CourseLevel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -11,8 +12,9 @@ import org.hibernate.annotations.ColumnDefault;
 }, uniqueConstraints = {
         @UniqueConstraint(name = "code", columnNames = {"code"})
 })
-public class Cours {
+public class Course {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -31,9 +33,9 @@ public class Cours {
     private Integer credits;
 
     @NotNull
-    @Lob
+    @Enumerated(EnumType.STRING)
     @Column(name = "level", nullable = false)
-    private String level;
+    private CourseLevel level;
 
     @Size(max = 20)
     @Column(name = "semester", length = 20)
@@ -53,7 +55,7 @@ public class Cours {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "instructor_id", nullable = false)
-    private AcademicStaff instructorId;
+    private AcademicStaff instructor;
 
     @ColumnDefault("1")
     @Column(name = "is_active")
@@ -91,11 +93,11 @@ public class Cours {
         this.credits = credits;
     }
 
-    public String getLevel() {
+    public CourseLevel getLevel() {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(CourseLevel level) {
         this.level = level;
     }
 
@@ -131,12 +133,12 @@ public class Cours {
         this.currentEnrollment = currentEnrollment;
     }
 
-    public AcademicStaff getInstructorId() {
-        return instructorId;
+    public AcademicStaff getInstructor() {
+        return instructor;
     }
 
-    public void setInstructorId(AcademicStaff instructorId) {
-        this.instructorId = instructorId;
+    public void setInstructor(AcademicStaff instructor) {
+        this.instructor = instructor;
     }
 
     public Boolean getIsActive() {
@@ -146,5 +148,4 @@ public class Cours {
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
     }
-
 }

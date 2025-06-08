@@ -1,5 +1,7 @@
 package com.ege.entities;
 
+import com.ege.entities.enums.ThesisType;
+import com.ege.entities.enums.ThesisStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -17,6 +19,7 @@ import java.time.LocalDate;
 })
 public class Thesis {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -24,7 +27,7 @@ public class Thesis {
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "student_id", nullable = false)
-    private Student studentId;
+    private Student student;
 
     @Size(max = 500)
     @NotNull
@@ -32,9 +35,9 @@ public class Thesis {
     private String title;
 
     @NotNull
-    @Lob
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private String type;
+    private ThesisType type;
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -43,14 +46,14 @@ public class Thesis {
     private LocalDate defenseDate;
 
     @ColumnDefault("'DEVAM_EDIYOR'")
-    @Lob
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private ThesisStatus status;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "supervisor_id", nullable = false)
-    private AcademicStaff supervisorId;
+    private AcademicStaff supervisor;
 
     public Long getId() {
         return id;
@@ -60,12 +63,12 @@ public class Thesis {
         this.id = id;
     }
 
-    public Student getStudentId() {
-        return studentId;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentId(Student studentId) {
-        this.studentId = studentId;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     public String getTitle() {
@@ -76,11 +79,11 @@ public class Thesis {
         this.title = title;
     }
 
-    public String getType() {
+    public ThesisType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(ThesisType type) {
         this.type = type;
     }
 
@@ -100,20 +103,19 @@ public class Thesis {
         this.defenseDate = defenseDate;
     }
 
-    public String getStatus() {
+    public ThesisStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ThesisStatus status) {
         this.status = status;
     }
 
-    public AcademicStaff getSupervisorId() {
-        return supervisorId;
+    public AcademicStaff getSupervisor() {
+        return supervisor;
     }
 
-    public void setSupervisorId(AcademicStaff supervisorId) {
-        this.supervisorId = supervisorId;
+    public void setSupervisor(AcademicStaff supervisor) {
+        this.supervisor = supervisor;
     }
-
 }

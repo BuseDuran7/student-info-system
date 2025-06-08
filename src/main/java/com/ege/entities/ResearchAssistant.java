@@ -22,7 +22,7 @@ public class ResearchAssistant {
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id", nullable = false)
-    private User users;
+    private User user;
 
     @Size(max = 100)
     @NotNull
@@ -38,7 +38,7 @@ public class ResearchAssistant {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "student_id")
-    private User studentId;
+    private Student student;
 
     public Long getId() {
         return id;
@@ -48,12 +48,12 @@ public class ResearchAssistant {
         this.id = id;
     }
 
-    public User getUsers() {
-        return users;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsers(User users) {
-        this.users = users;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getDepartment() {
@@ -80,12 +80,11 @@ public class ResearchAssistant {
         this.salary = salary;
     }
 
-    public User getStudentId() {
-        return studentId;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentId(User studentId) {
-        this.studentId = studentId;
+    public void setStudent(Student student) {
+        this.student = student;
     }
-
 }

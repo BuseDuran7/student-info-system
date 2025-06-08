@@ -1,5 +1,6 @@
 package com.ege.entities;
 
+import com.ege.entities.enums.LetterGrade;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnDefault;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 })
 public class Grade {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -25,20 +27,20 @@ public class Grade {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "student_id", nullable = false)
-    private Student studentId;
+    private Student student;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "course_id", nullable = false)
-    private Cours courseId;
+    private Course course;
 
     @Column(name = "numeric_grade", precision = 5, scale = 2)
     private BigDecimal numericGrade;
 
-    @Lob
+    @Enumerated(EnumType.STRING)
     @Column(name = "letter_grade")
-    private String letterGrade;
+    private LetterGrade letterGrade;
 
     @ColumnDefault("0")
     @Column(name = "is_passed")
@@ -59,20 +61,20 @@ public class Grade {
         this.id = id;
     }
 
-    public Student getStudentId() {
-        return studentId;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentId(Student studentId) {
-        this.studentId = studentId;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public Cours getCourseId() {
-        return courseId;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setCourseId(Cours courseId) {
-        this.courseId = courseId;
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     public BigDecimal getNumericGrade() {
@@ -83,11 +85,11 @@ public class Grade {
         this.numericGrade = numericGrade;
     }
 
-    public String getLetterGrade() {
+    public LetterGrade getLetterGrade() {
         return letterGrade;
     }
 
-    public void setLetterGrade(String letterGrade) {
+    public void setLetterGrade(LetterGrade letterGrade) {
         this.letterGrade = letterGrade;
     }
 
@@ -114,5 +116,4 @@ public class Grade {
     public void setGradedBy(AcademicStaff gradedBy) {
         this.gradedBy = gradedBy;
     }
-
 }

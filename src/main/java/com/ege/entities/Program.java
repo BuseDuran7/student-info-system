@@ -1,5 +1,6 @@
 package com.ege.entities;
 
+import com.ege.entities.enums.ProgramType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 @Table(name = "programs")
 public class Program {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -20,9 +22,9 @@ public class Program {
     private String name;
 
     @NotNull
-    @Lob
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private String type;
+    private ProgramType type;
 
     @NotNull
     @Column(name = "required_courses", nullable = false)
@@ -74,11 +76,11 @@ public class Program {
         this.name = name;
     }
 
-    public String getType() {
+    public ProgramType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(ProgramType type) {
         this.type = type;
     }
 
@@ -145,5 +147,4 @@ public class Program {
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
     }
-
 }

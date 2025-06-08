@@ -48,5 +48,4 @@ public class CourseAssistantId implements Serializable {
     public int hashCode() {
         return Objects.hash(assistantId, courseId);
     }
-
 }

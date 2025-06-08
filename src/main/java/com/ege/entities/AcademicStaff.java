@@ -1,5 +1,6 @@
 package com.ege.entities;
 
+import com.ege.entities.enums.Title;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -21,12 +22,12 @@ public class AcademicStaff {
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id", nullable = false)
-    private User users;
+    private User user;
 
     @NotNull
-    @Lob
+    @Enumerated(EnumType.STRING)
     @Column(name = "title", nullable = false)
-    private String title;
+    private Title title;
 
     @Size(max = 100)
     @NotNull
@@ -55,19 +56,19 @@ public class AcademicStaff {
         this.id = id;
     }
 
-    public User getUsers() {
-        return users;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsers(User users) {
-        this.users = users;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getTitle() {
+    public Title getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(Title title) {
         this.title = title;
     }
 
@@ -110,5 +111,4 @@ public class AcademicStaff {
     public void setSeniorityYears(Integer seniorityYears) {
         this.seniorityYears = seniorityYears;
     }
-
 }

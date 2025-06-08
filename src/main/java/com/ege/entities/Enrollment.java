@@ -1,5 +1,6 @@
 package com.ege.entities;
 
+import com.ege.entities.enums.EnrollmentStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnDefault;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 })
 public class Enrollment {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -23,22 +25,22 @@ public class Enrollment {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "student_id", nullable = false)
-    private Student studentId;
+    private Student student;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "course_id", nullable = false)
-    private Cours courseId;
+    private Course course;
 
     @NotNull
     @Column(name = "enrollment_date", nullable = false)
     private LocalDate enrollmentDate;
 
     @ColumnDefault("'KAYITLI'")
-    @Lob
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private EnrollmentStatus status;
 
     public Long getId() {
         return id;
@@ -48,20 +50,20 @@ public class Enrollment {
         this.id = id;
     }
 
-    public Student getStudentId() {
-        return studentId;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentId(Student studentId) {
-        this.studentId = studentId;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public Cours getCourseId() {
-        return courseId;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setCourseId(Cours courseId) {
-        this.courseId = courseId;
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     public LocalDate getEnrollmentDate() {
@@ -72,12 +74,11 @@ public class Enrollment {
         this.enrollmentDate = enrollmentDate;
     }
 
-    public String getStatus() {
+    public EnrollmentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(EnrollmentStatus status) {
         this.status = status;
     }
-
 }

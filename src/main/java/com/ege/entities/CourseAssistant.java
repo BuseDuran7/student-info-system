@@ -16,13 +16,13 @@ public class CourseAssistant {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "course_id", nullable = false)
-    private Cours courseId;
+    private Course course;
 
     @MapsId("assistantId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "assistant_id", nullable = false)
-    private ResearchAssistant assistantId;
+    private ResearchAssistant assistant;
 
     public CourseAssistantId getId() {
         return id;
@@ -32,20 +32,19 @@ public class CourseAssistant {
         this.id = id;
     }
 
-    public Cours getCourseId() {
-        return courseId;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setCourseId(Cours courseId) {
-        this.courseId = courseId;
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
-    public ResearchAssistant getAssistantId() {
-        return assistantId;
+    public ResearchAssistant getAssistant() {
+        return assistant;
     }
 
-    public void setAssistantId(ResearchAssistant assistantId) {
-        this.assistantId = assistantId;
+    public void setAssistant(ResearchAssistant assistant) {
+        this.assistant = assistant;
     }
-
 }

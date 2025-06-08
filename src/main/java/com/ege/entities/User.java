@@ -1,5 +1,4 @@
 package com.ege.entities;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -18,6 +17,7 @@ import java.time.Instant;
 })
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -53,7 +53,7 @@ public class User {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_role_id", nullable = false)
-    private UserRole userRoleId;
+    private UserRole userRole;
 
     @Size(max = 20)
     @Column(name = "employee_id", length = 20)
@@ -127,12 +127,12 @@ public class User {
         this.phone = phone;
     }
 
-    public UserRole getUserRoleId() {
-        return userRoleId;
+    public UserRole getUserRole() {
+        return userRole;
     }
 
-    public void setUserRoleId(UserRole userRoleId) {
-        this.userRoleId = userRoleId;
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
     }
 
     public String getEmployeeId() {
@@ -166,5 +166,4 @@ public class User {
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
-
 }

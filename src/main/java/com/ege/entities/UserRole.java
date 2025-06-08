@@ -13,6 +13,7 @@ import java.time.Instant;
 })
 public class UserRole {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -72,5 +73,4 @@ public class UserRole {
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
-
 }

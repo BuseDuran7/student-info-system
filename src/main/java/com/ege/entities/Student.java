@@ -23,12 +23,12 @@ public class Student {
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id", nullable = false)
-    private User users;
+    private User user;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "program_id", nullable = false)
-    private Program programId;
+    private Program program;
 
     @NotNull
     @Column(name = "enrollment_date", nullable = false)
@@ -60,7 +60,7 @@ public class Student {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "advisor_id")
-    private AcademicStaff advisorId;
+    private AcademicStaff advisor;
 
     public Long getId() {
         return id;
@@ -70,20 +70,20 @@ public class Student {
         this.id = id;
     }
 
-    public User getUsers() {
-        return users;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsers(User users) {
-        this.users = users;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Program getProgramId() {
-        return programId;
+    public Program getProgram() {
+        return program;
     }
 
-    public void setProgramId(Program programId) {
-        this.programId = programId;
+    public void setProgram(Program program) {
+        this.program = program;
     }
 
     public LocalDate getEnrollmentDate() {
@@ -142,12 +142,11 @@ public class Student {
         this.isGraduated = isGraduated;
     }
 
-    public AcademicStaff getAdvisorId() {
-        return advisorId;
+    public AcademicStaff getAdvisor() {
+        return advisor;
     }
 
-    public void setAdvisorId(AcademicStaff advisorId) {
-        this.advisorId = advisorId;
+    public void setAdvisor(AcademicStaff advisor) {
+        this.advisor = advisor;
     }
-
 }
