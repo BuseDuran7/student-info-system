@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 @Table(name = "programs")
@@ -60,91 +61,66 @@ public class Program {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    public Long getId() {
-        return id;
+    // Bidirectional ilişki - program'a kayıtlı öğrenciler
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Student> students;
+
+    // Business logic methods
+    public Integer getPassingGradeForProgramType() {
+        return switch (this.type) {
+            case DOKTORA -> this.passingGradePhd;
+            case TEZLI_YL, TEZSIZ_YL -> this.passingGradeMasters;
+            case BILIMSEL_HAZIRLIK -> this.passingGradeMasters;
+        };
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public boolean isGraduationRequirementMet(Student student) {
+        // Ders ve kredi şartları
+        boolean courseRequirementMet = student.getCompletedCourses() >= this.requiredCourses;
+        boolean creditRequirementMet = student.getTotalCredits() >= this.requiredCredits;
+        boolean gpaRequirementMet = student.getGpa().compareTo(this.minimumGpa) >= 0;
+
+        // Tez şartı
+        boolean thesisRequirementMet = !this.hasThesis || student.getThesisCompleted();
+
+        return courseRequirementMet && creditRequirementMet &&
+                gpaRequirementMet && thesisRequirementMet;
     }
 
-    public String getName() {
-        return name;
-    }
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public ProgramType getType() {
-        return type;
-    }
+    public ProgramType getType() { return type; }
+    public void setType(ProgramType type) { this.type = type; }
 
-    public void setType(ProgramType type) {
-        this.type = type;
-    }
+    public Integer getRequiredCourses() { return requiredCourses; }
+    public void setRequiredCourses(Integer requiredCourses) { this.requiredCourses = requiredCourses; }
 
-    public Integer getRequiredCourses() {
-        return requiredCourses;
-    }
+    public Integer getRequiredCredits() { return requiredCredits; }
+    public void setRequiredCredits(Integer requiredCredits) { this.requiredCredits = requiredCredits; }
 
-    public void setRequiredCourses(Integer requiredCourses) {
-        this.requiredCourses = requiredCourses;
-    }
+    public BigDecimal getMinimumGpa() { return minimumGpa; }
+    public void setMinimumGpa(BigDecimal minimumGpa) { this.minimumGpa = minimumGpa; }
 
-    public Integer getRequiredCredits() {
-        return requiredCredits;
-    }
+    public Integer getMaxDurationYears() { return maxDurationYears; }
+    public void setMaxDurationYears(Integer maxDurationYears) { this.maxDurationYears = maxDurationYears; }
 
-    public void setRequiredCredits(Integer requiredCredits) {
-        this.requiredCredits = requiredCredits;
-    }
+    public Boolean getHasThesis() { return hasThesis; }
+    public void setHasThesis(Boolean hasThesis) { this.hasThesis = hasThesis; }
 
-    public BigDecimal getMinimumGpa() {
-        return minimumGpa;
-    }
+    public Integer getPassingGradeMasters() { return passingGradeMasters; }
+    public void setPassingGradeMasters(Integer passingGradeMasters) { this.passingGradeMasters = passingGradeMasters; }
 
-    public void setMinimumGpa(BigDecimal minimumGpa) {
-        this.minimumGpa = minimumGpa;
-    }
+    public Integer getPassingGradePhd() { return passingGradePhd; }
+    public void setPassingGradePhd(Integer passingGradePhd) { this.passingGradePhd = passingGradePhd; }
 
-    public Integer getMaxDurationYears() {
-        return maxDurationYears;
-    }
+    public Boolean getIsActive() { return isActive; }
+    public void setIsActive(Boolean isActive) { this.isActive = isActive; }
 
-    public void setMaxDurationYears(Integer maxDurationYears) {
-        this.maxDurationYears = maxDurationYears;
-    }
-
-    public Boolean getHasThesis() {
-        return hasThesis;
-    }
-
-    public void setHasThesis(Boolean hasThesis) {
-        this.hasThesis = hasThesis;
-    }
-
-    public Integer getPassingGradeMasters() {
-        return passingGradeMasters;
-    }
-
-    public void setPassingGradeMasters(Integer passingGradeMasters) {
-        this.passingGradeMasters = passingGradeMasters;
-    }
-
-    public Integer getPassingGradePhd() {
-        return passingGradePhd;
-    }
-
-    public void setPassingGradePhd(Integer passingGradePhd) {
-        this.passingGradePhd = passingGradePhd;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
+    public Set<Student> getStudents() { return students; }
+    public void setStudents(Set<Student> students) { this.students = students; }
 }
