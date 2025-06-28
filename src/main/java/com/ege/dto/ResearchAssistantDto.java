@@ -1,6 +1,8 @@
 // 3. ResearchAssistantDto - Araştırma görevlisi bilgileri için
 package com.ege.dto;
 
+import com.ege.entities.enums.ProgramType;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -14,7 +16,7 @@ public class ResearchAssistantDto {
     private String department;
     private LocalDate hireDate;
     private BigDecimal salary;
-    private StudentProfileDto studentProfile; // Eğer öğrenci ise
+    private StudentProfileSummary studentProfile; // Tip değiştirildi
     private List<CourseDto> assistedCourses;
 
     // Getters and setters
@@ -42,9 +44,34 @@ public class ResearchAssistantDto {
     public BigDecimal getSalary() { return salary; }
     public void setSalary(BigDecimal salary) { this.salary = salary; }
 
-    public StudentProfileDto getStudentProfile() { return studentProfile; }
-    public void setStudentProfile(StudentProfileDto studentProfile) { this.studentProfile = studentProfile; }
+    public StudentProfileSummary getStudentProfile() { return studentProfile; }
+    public void setStudentProfile(StudentProfileSummary studentProfile) { this.studentProfile = studentProfile; }
 
     public List<CourseDto> getAssistedCourses() { return assistedCourses; }
     public void setAssistedCourses(List<CourseDto> assistedCourses) { this.assistedCourses = assistedCourses; }
+
+    // StudentProfileSummary nested class - ResearchAssistantDto içine taşındı
+    public static class StudentProfileSummary {
+        private Long id;
+        private String studentId;
+        private String programName;
+        private ProgramType programType;
+        private BigDecimal gpa;
+
+        // Getters and setters
+        public Long getId() { return id; }
+        public void setId(Long id) { this.id = id; }
+
+        public String getStudentId() { return studentId; }
+        public void setStudentId(String studentId) { this.studentId = studentId; }
+
+        public String getProgramName() { return programName; }
+        public void setProgramName(String programName) { this.programName = programName; }
+
+        public ProgramType getProgramType() { return programType; }
+        public void setProgramType(ProgramType programType) { this.programType = programType; }
+
+        public BigDecimal getGpa() { return gpa; }
+        public void setGpa(BigDecimal gpa) { this.gpa = gpa; }
+    }
 }
