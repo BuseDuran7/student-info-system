@@ -1,4 +1,3 @@
-// 6. LoginDto - Giriş için
 package com.ege.dto;
 
 public class LoginDto {
@@ -13,7 +12,7 @@ public class LoginDto {
         this.password = password;
     }
 
-    // Getters and setters
+    // Getters and Setters
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 

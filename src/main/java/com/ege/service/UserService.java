@@ -7,6 +7,7 @@ import com.ege.entities.UserRole;
 import com.ege.repository.UserRepository;
 import com.ege.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,10 @@ public class UserService {
 
     @Autowired
     private UserRoleRepository userRoleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     // Tüm kullanıcıları getir
     public List<UserDto> getAllUsers() {
@@ -88,7 +93,7 @@ public class UserService {
         if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new RuntimeException("Email already exists: " + userDto.getEmail());
         }
-        if (userDto.getEmployeeId() != null && userRepository.existsByEmployeeId(userDto.getEmployeeId())) {
+        if (userDto.getEmployeeId() != null && userRepository.existsByStudentId(userDto.getEmployeeId())) {
             throw new RuntimeException("Employee ID already exists: " + userDto.getEmployeeId());
         }
         if (userDto.getStudentId() != null && userRepository.existsByStudentId(userDto.getStudentId())) {
@@ -100,6 +105,10 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Role not found: " + userDto.getRoleName()));
 
         User user = convertToEntity(userDto);
+
+        // ŞİFREYİ HASH'LE - BU SATIRLARI EKLEYİN
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
         user.setUserRole(userRole);
         user.setCreatedAt(Instant.now());
         user.setIsActive(true);
@@ -141,8 +150,8 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
-        // Mevcut şifre kontrolü
-        if (!user.getPassword().equals(changePasswordDto.getCurrentPassword())) {
+        // Mevcut şifre kontrolü - HASH'LENMİŞ ŞİFRE KONTROLÜ
+        if (!passwordEncoder.matches(changePasswordDto.getCurrentPassword(), user.getPassword())) {
             throw new RuntimeException("Current password is incorrect");
         }
 
@@ -156,7 +165,8 @@ public class UserService {
             throw new RuntimeException("Password must be at least 6 characters long");
         }
 
-        user.setPassword(changePasswordDto.getNewPassword());
+        // YENİ ŞİFREYİ HASH'LE
+        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
         userRepository.save(user);
         return true;
     }
@@ -232,7 +242,7 @@ public class UserService {
 
         // Password güncelleme (sadece gönderilmişse)
         if (dto.getPassword() != null && !dto.getPassword().trim().isEmpty()) {
-            user.setPassword(dto.getPassword());
+            user.setPassword(passwordEncoder.encode(dto.getPassword())); // HASH'LE
         }
 
         if (dto.getIsActive() != null) {

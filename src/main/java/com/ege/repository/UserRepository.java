@@ -13,11 +13,10 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    // Username ile kullanıcı bul
-    Optional<User> findByUsername(String username);
+    /// LAZY loading sorunu çözmek için JOIN FETCH kullanın
+    @Query("SELECT u FROM User u JOIN FETCH u.userRole WHERE u.username = :username")
+    Optional<User> findByUsername(@Param("username") String username);
 
-    // Email ile kullanıcı bul
-    Optional<User> findByEmail(String email);
 
     // Employee ID ile kullanıcı bul
     Optional<User> findByEmployeeId(String employeeId);
@@ -30,6 +29,19 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Role'e göre kullanıcıları getir
     List<User> findByUserRole(UserRole userRole);
+
+    // Case insensitive version (eğer gerekirse)
+    @Query("SELECT u FROM User u JOIN FETCH u.userRole WHERE LOWER(u.username) = LOWER(:username)")
+    Optional<User> findByUsernameIgnoreCase(@Param("username") String username);
+
+
+    // Username veya email ile arama
+    @Query("SELECT u FROM User u WHERE u.username = :username OR u.email = :username")
+    Optional<User> findByUsernameOrEmail(@Param("username") String username);
+
+    // ID ile arama (JWT token doğrulama için)
+    @Query("SELECT u FROM User u JOIN FETCH u.userRole WHERE u.id = :id")
+    Optional<User> findById(@Param("id") Long id);
 
     // Role name'e göre kullanıcıları getir
     @Query("SELECT u FROM User u WHERE u.userRole.roleName = :roleName")
@@ -58,6 +70,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Email domain'ine göre arama
     @Query("SELECT u FROM User u WHERE u.email LIKE CONCAT('%', :domain)")
     List<User> findByEmailDomain(@Param("domain") String domain);
+
+    // Email ile arama
+    @Query("SELECT u FROM User u JOIN FETCH u.userRole WHERE u.email = :email")
+    Optional<User> findByEmail(@Param("email") String email);
 
     // Aktif kullanıcıları ada göre sırala
     @Query("SELECT u FROM User u WHERE u.isActive = true ORDER BY u.firstName, u.lastName")

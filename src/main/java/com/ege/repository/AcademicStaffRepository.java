@@ -20,12 +20,12 @@ public interface AcademicStaffRepository extends JpaRepository<AcademicStaff, Lo
     Optional<AcademicStaff> findByUser(User user);
 
     // User ID ile akademik personel bul
-    @Query("SELECT a FROM AcademicStaff a WHERE a.user.id = :userId")
-    Optional<AcademicStaff> findByUserId(@Param("userId") Long userId);
+    @Query(value = "SELECT a.* FROM academic_staff a JOIN users u ON u.employee_id = a.id WHERE u.id = ?1", nativeQuery = true)
+    Optional<AcademicStaff> findByUserId(Long userId);
 
     // Username ile akademik personel bul
-    @Query("SELECT a FROM AcademicStaff a WHERE a.user.username = :username")
-    Optional<AcademicStaff> findByUsername(@Param("username") String username);
+    @Query(value = "SELECT a.* FROM academic_staff a JOIN users u ON u.employee_id = CAST(a.id AS CHAR) WHERE u.username = ?1", nativeQuery = true)
+    Optional<AcademicStaff> findByUsername(String username);
 
     // Ünvana göre akademik personel listesi
     List<AcademicStaff> findByTitle(Title title);
